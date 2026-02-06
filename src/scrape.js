@@ -1,7 +1,10 @@
 import fetch from "node-fetch";
 import cheerio from "cheerio";
-import pdf from "pdf-parse";
 import fs from "fs/promises";
+
+// Dynamic import for CommonJS module
+async function main() {
+  const pdf = (await import("pdf-parse")).default;
 
 // 官方 HTML（內含中位數字句）
 const HTML_URL =
@@ -75,4 +78,5 @@ async function main() {
 main().catch((err) => {
   console.error(err);
   process.exit(1);
+
 });
