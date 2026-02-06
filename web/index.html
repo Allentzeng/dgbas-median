@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>台灣斬殺線生存法則</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; max-width: 600px; margin:auto; }
+    input { padding: 10px; width: 200px; font-size: 1.2em; }
+    button { padding: 10px 20px; font-size: 1.1em; }
+    .result { margin-top: 20px; font-size: 1.8em; font-weight: bold; }
+    .safe { color: green; }
+    .gg { color: red; }
+  </style>
+</head>
+<body>
+  <h1>台灣斬殺線生存法則</h1>
+
+  <p>本頁會自動抓取主計總處「月平均薪資中位數」</p>
+
+  <div>
+    <label>你的月薪：</label>
+    <input id="salary" type="number" placeholder="例如 42000" />
+    <button onclick="check()">比一比</button>
+  </div>
+
+  <div id="median"></div>
+  <div id="result" class="result"></div>
+
+  <script>
+    let median = null;
+
+    async function loadMedian() {
+      const res = await fetch("https://<你的 GitHub 帳號>.github.io/dgbas-median/public/median.json");
+      const data = await res.json();
+      median = data.value;
+      document.getElementById("median").innerHTML =
+        `主計總處中位數：<b>${median.toLocaleString()}</b> 元`;
+    }
+
+    function check() {
+      const salary = Number(document.getElementById("salary").value);
+      if (!salary) return;
+
+      const resultDiv = document.getElementById("result");
+
+      if (salary >= median) {
+        resultDiv.innerHTML = "高於斬殺線，SAFE!";
+        resultDiv.className = "result safe";
+      } else {
+        resultDiv.innerHTML = "低於斬殺線，GG!";
+        resultDiv.className = "result gg";
+      }
+    }
+
+    loadMedian();
+  </script>
+</body>
+</html>
